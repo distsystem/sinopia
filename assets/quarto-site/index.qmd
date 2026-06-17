@@ -1,0 +1,14 @@
+---
+title: "PROJECT_NAME"
+description: "ONE-LINE TAGLINE"
+toc: false
+---
+
+<!-- Home = the repo README, so GitHub and the docs site share one front page.
+     README.md lives at the repo root and links to pages as [page](docs/page.md);
+     the rebase-readme-links filter rewrites those to resolve inside the site.
+     The frontmatter title/description here is the intentional home-page exception to
+     the bare-# title rule; the visible h1 comes from the README's own top heading.
+     Prefer a hand-written home instead? Delete the include and write Markdown here. -->
+
+{{< include ../README.md >}}

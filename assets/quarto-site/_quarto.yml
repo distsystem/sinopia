@@ -1,0 +1,44 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "PROJECT_NAME"            # edit: your project / library name
+  description: "ONE-LINE TAGLINE"  # edit: a single-sentence framing
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    background: dark
+    pinned: true
+  sidebar:
+    style: docked
+    contents: auto                 # one entry point auto-discovers every page
+  page-footer:
+    left: "PROJECT_NAME"
+    right: "Built with [Quarto](https://quarto.org)"
+
+filters:
+  - _filters/rebase-readme-links.lua
+  - _filters/compare-option.lua
+
+format:
+  html:
+    theme:
+      light: [flatly, styles-light.scss]
+      dark: [darkly, styles.scss]
+    toc: true
+    toc-depth: 3
+    toc-location: right
+    code-block-bg: true
+    code-block-border-left: false
+    code-copy: true
+    code-overflow: wrap
+    highlight-style:
+      light: github
+      dark: github-dark
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-newwindow: true
+    mainfont: "-apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif"
+    monofont: "JetBrains Mono, SF Mono, Menlo, Consolas, monospace"

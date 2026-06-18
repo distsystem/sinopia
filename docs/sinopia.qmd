@@ -1,0 +1,46 @@
+# sinopia
+
+Diagrams as code: a figure is a tree of first-class models that render to theme-aware SVG.
+[Prose drafted via the loop.]{.badge .text-bg-secondary}
+
+The figure below is drawn by sinopia and rendered live during the build — the code shown *is*
+its source, so this page is a worked example of the library:
+
+```{python}
+#| echo: true
+#| output: asis
+import sinopia as S
+from figkit import show
+
+a = S.Box(24, 30, 150, 54)
+b = S.Box(316, 30, 150, 54)
+fig = S.Figure(490, 120,
+    S.Markers("primary"),
+    S.Rect(a, "success"),
+    S.Text(*a.at(.5, .42), "declare", role="success", weight=True, anchor="middle"),
+    S.Text(*a.at(.5, .72), "Box · Node", role="mut", size=9.5, anchor="middle"),
+    S.Rect(b, "primary"),
+    S.Text(*b.at(.5, .42), "render()", role="primary", weight=True, anchor="middle"),
+    S.Text(*b.at(.5, .72), "themed SVG", role="mut", size=9.5, anchor="middle"),
+    S.Route(a.right, b.left, "primary", shape="sweep", label="layout() computes coords"),
+)
+show(fig)
+```
+
+## The model tree [PLAN]{.badge .text-bg-secondary}
+
+```{python}
+#| echo: false
+#| output: asis
+import figures
+from figkit import show
+show(figures.model_tree())
+```
+
+## Declarative layout [PLAN]{.badge .text-bg-secondary}
+
+```{python}
+#| echo: false
+#| output: asis
+show(figures.layout_engine())
+```

@@ -1,0 +1,20 @@
+# The workflow
+
+Documentation is the working surface: the docs hold the *current and intended* state, discussions
+happen as gitignored drafts that look like the real docs, and once a discussion settles it reflows
+into the evergreen pages. History and rationale ride git, not the docs.
+[Prose drafted via the loop.]{.badge .text-bg-secondary}
+
+The loop below is itself a sinopia figure, rendered live during this build:
+
+```{python}
+#| echo: false
+#| output: asis
+import figures
+from figkit import show
+show(figures.loop())
+```
+
+## Evergreen voice [PLAN]{.badge .text-bg-secondary}
+
+## Drafts [PLAN]{.badge .text-bg-secondary}

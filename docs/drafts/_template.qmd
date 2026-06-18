@@ -1,0 +1,57 @@
+---
+title: "TOPIC: one-line thesis"
+subtitle: "the decision this draft is driving"
+---
+
+<!-- DISCUSSION DRAFT · local-only, gitignored.
+     Copy this file to drafts/<slug>.qmd and fill it in. One slug per topic,
+     reused for the whole session so the open tab just reloads. The underscore
+     prefix makes Quarto skip THIS template, so it never renders as a page.
+     `quarto preview` hot-reloads <slug>.qmd in the browser on every save.
+     This is a discussion artifact, not final docs: once the shape is agreed,
+     reflow it into the evergreen main docs and delete this draft. -->
+
+::: {.callout-important appearance="simple"}
+**Thesis:** the one claim this draft defends, in a sentence.
+:::
+
+## Problem
+
+What the ordinary approach does, and exactly where it hurts.
+
+## Options
+
+::: {.grid}
+::: {.compare-option verdict=danger tag="Option A" title="short name" label="Rejected"}
+why it loses
+:::
+::: {.compare-option verdict=warning tag="Option B" title="short name" label="Trade-off"}
+the cost it carries
+:::
+::: {.compare-option verdict=success tag="Option C" title="short name" label="Adopted"}
+why it wins
+:::
+:::
+
+## Shape
+
+A diagram or API sketch. A theme-aware SVG goes inside a `{=html}` block and
+colors only with `var(--bs-body-color)` / `var(--bs-<semantic>)` (+ `fill-opacity`),
+never hardcoded hex, so it survives the light↔dark toggle. Inline sizing on the
+`<svg>` is fine; only color must stay theme-driven.
+
+```{=html}
+<figure class="text-center my-4">
+<svg role="img" viewBox="0 0 480 120" style="width:100%;max-width:480px;height:auto;font-family:inherit;font-size:13px">
+  <rect x="40" y="40" width="160" height="44" rx="8" fill="var(--bs-info)" fill-opacity="0.15" stroke="var(--bs-info)"/>
+  <text x="120" y="67" text-anchor="middle" fill="var(--bs-body-color)">before</text>
+  <rect x="280" y="40" width="160" height="44" rx="8" fill="var(--bs-success)" fill-opacity="0.15" stroke="var(--bs-success)"/>
+  <text x="360" y="67" text-anchor="middle" fill="var(--bs-body-color)">after</text>
+  <line x1="200" y1="62" x2="280" y2="62" stroke="var(--bs-body-color)"/>
+</svg>
+</figure>
+```
+
+## Open questions
+
+- the framing / naming / scope calls that still need the user's decision

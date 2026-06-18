@@ -10,7 +10,7 @@ website:
     type: overlay
   navbar:
     background: dark
-    pinned: true
+    pinned: false   # scroll away with the page; a pinned opaque bar overlaps tall figures
   sidebar:
     style: docked
     contents: auto                 # one entry point auto-discovers every page

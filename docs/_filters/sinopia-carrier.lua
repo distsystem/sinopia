@@ -25,7 +25,16 @@ function Pandoc(doc)
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll('script[type="application/sinopia"]').forEach(function (s) {
     var fig = s.previousElementSibling;
-    if (fig && fig.classList.contains("sinopia-fig")) fig.innerHTML = s.textContent;
+    if (!fig || !fig.classList.contains("sinopia-fig")) return;
+    fig.innerHTML = s.textContent;
+    var svg = fig.querySelector("svg");
+    if (svg) {                                  // cap at natural size; shrink, never upscale
+      svg.style.maxWidth = svg.viewBox.baseVal.width + "px";
+      svg.style.width = "100%";
+      svg.style.height = "auto";
+      svg.style.display = "block";
+      svg.style.margin = "1rem auto";
+    }
   });
 });
 </script>]]))

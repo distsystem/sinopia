@@ -1,7 +1,6 @@
 project:
   type: website
   output-dir: _site
-  post-render: fix-svg-case.py   # restore inline-SVG camelCase attrs Quarto lowercases
 
 website:
   title: "doc-driven-dev"
@@ -22,6 +21,7 @@ website:
 filters:
   - _filters/rebase-readme-links.lua
   - _filters/compare-option.lua
+  - _filters/sinopia-carrier.lua   # stash figure SVG in a <script> so deno-dom can't mangle it
 
 format:
   html:

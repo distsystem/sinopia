@@ -1,11 +1,9 @@
-# The workflow
+# 工作流
 
-Documentation is the working surface: the docs hold the *current and intended* state, discussions
-happen as gitignored drafts that look like the real docs, and once a discussion settles it reflows
-into the evergreen pages. History and rationale ride git, not the docs.
-[Prose drafted via the loop.]{.badge .text-bg-secondary}
+文档是工作面:正式文档只装*当前与计划中*的状态,讨论以 gitignore 的草稿进行,草稿和正式页长得
+一模一样;一段讨论谈定后,就回流进 evergreen 页面。历史与缘由交给 commit 和 PR,不进文档。
 
-The loop below is itself a sinopia figure, rendered live during this build:
+下面这条循环本身也是一张 sinopia 图,随本页构建时现场渲染:
 
 ```{python}
 #| echo: false
@@ -15,6 +13,44 @@ from figkit import show
 show(figures.loop())
 ```
 
-## Evergreen voice [PLAN]{.badge .text-bg-secondary}
+## 文档写当前,不写变更史
 
-## Drafts [PLAN]{.badge .text-bg-secondary}
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-warning title="普通做法"}
+文档里夹着"新增了 X"、"改为 Y"、"不再支持 Z"。随着迭代,这些叙述变成陈旧的层积;读者读一段,
+分不清哪句是现状、哪句是旧闻。
+:::
+::::
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-tip title="evergreen"}
+只陈述当前事实与计划中的状态(`X 是 Y`、`没有 Z`)。任何时间点来读,都是"当下"。变更如何发生、
+为什么这么定,留给 commit message 与 PR。还没落地的设计也留在正文,用 `[PLAN]` 徽章标出,落地时
+摘掉徽章。
+:::
+::::
+:::::
+
+## 讨论先成草稿,谈定再回流
+
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-warning title="普通做法"}
+讨论要么散在 issue 与聊天里、回头难找,要么直接动正式文档,半成品和已定的内容混在一起,读者
+踩进尚未谈拢的设计。
+:::
+::::
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-tip title="草稿"}
+讨论落进 `docs/drafts/<slug>.qmd`:gitignore、套站点主题,因此和正式页长得一样,谈定后回流近乎
+零成本。`quarto preview` 存盘即热重载,开一个标签页就够。谈定后把结构移进 evergreen 正文,删掉
+草稿。
+:::
+::::
+:::::
+
+## 单一入口
+
+侧栏 `contents: auto` 自动列出每一页,配 navbar 的浮层搜索。加一页 `docs/<page>.qmd` 就可被发现,
+无需维护索引。图表则不手写:用 sinopia 在 Python 里组合、内联进页面(见 [sinopia](sinopia.qmd)),
+随构建现场渲染,因此文档与代码不会各自漂移。

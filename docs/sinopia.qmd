@@ -1,10 +1,9 @@
 # sinopia
 
-Diagrams as code: a figure is a tree of first-class models that render to theme-aware SVG.
-[Prose drafted via the loop.]{.badge .text-bg-secondary}
+一张图是一棵小小的 Python 模型树,渲染成 SVG:摆好位置的 `Box` 暴露具名锚点,形状带语义角色,
+连线自己算控制点。输出内联进页面,并跟随其明暗主题。
 
-The figure below is drawn by sinopia and rendered live during the build — the code shown *is*
-its source, so this page is a worked example of the library:
+整套想法浓缩在一张图里,由旁边的代码画出、随页面构建时现场渲染:
 
 ```{python}
 #| echo: true
@@ -27,20 +26,72 @@ fig = S.Figure(490, 120,
 show(fig)
 ```
 
-## The model tree [PLAN]{.badge .text-bg-secondary}
+## 摆布盒子,而非摆放坐标
+
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-warning title="手写"}
+每个盒子都带字面 `x, y, w, h`。挪动或缩放一个,就改变了它的邻居和连线所依赖的坐标,于是一处小
+改动散成满文件的连锁修改。
+:::
+::::
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-tip title="sinopia"}
+用 `Row` / `Col` / `Grid` 声明嵌套,`layout()` 算出每个坐标。加一个或改一个盒子,其余自动重排。
+布局后每个元素暴露自己的锚点,连线因此引用几何,而非数字。
+:::
+::::
+:::::
 
 ```{python}
 #| echo: false
 #| output: asis
 import figures
 from figkit import show
-show(figures.model_tree())
+show(figures.layout_engine())
 ```
 
-## Declarative layout [PLAN]{.badge .text-bg-secondary}
+## 按锚点连线,而非按坐标
+
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-warning title="手写"}
+一条连线是手调的 bezier 控制点,或手算的折角坐标。它们相对盒子是固定的:挪动盒子,曲线便接不上。
+:::
+::::
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-tip title="sinopia"}
+`route(a, b, shape=...)` 取两个锚点(`node.right`、`node.bottom`),按所选形状算出控制点或拐点。
+路径由锚点导出,因此随盒子一起移动。
+:::
+::::
+:::::
+
+## 颜色跟随主题
+
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-warning title="手写"}
+写死的 hex 把图钉在一种配色上。换到相反的背景,描边和填充就失了对比。
+:::
+::::
+:::: {.g-col-12 .g-col-md-6}
+::: {.callout-tip title="sinopia"}
+形状带一个角色(`primary`、`success`、`mut`),解析为 `var(--bs-*)`。内联的 SVG 读取页面的 CSS,
+所以同一张图在明暗两种主题下都清晰。本页每张图都如此。需要自包含(SVG 看不到页面)时,用 hex
+`PALETTE`。
+:::
+::::
+:::::
+
+## 模型树
+
+一张图在成为字符串之前,先是一个值。`Figure` 持有一棵树:frozen 的 `Drawable` 形状(`Rect`、
+`Card`、`Text`、`Route`)与 `Element` 容器(`Row`、`Col`、`Grid`、`Node`);`render()` 遍历这棵
+树、产出 SVG。闭集选项(`kind`、`shape`、`align`)带类型,所以填错值是构造期错误,而非静默画错。
 
 ```{python}
 #| echo: false
 #| output: asis
-show(figures.layout_engine())
+show(figures.model_tree())
 ```

@@ -7,21 +7,21 @@ import sinopia as S
 
 def loop() -> str:
     """The doc-driven-dev loop: a linear flow of stages, with rationale branching to git."""
-    spec = [("discuss", "secondary", ()),
-            ("draft", "primary", ("drafts/<slug>.qmd",)),
-            ("review", "primary", ()),
-            ("reflow", "success", ("when settled",)),
-            ("evergreen", "success", ("current + intended",))]
+    spec = [("讨论", "secondary", ()),
+            ("草稿", "primary", ("drafts/<slug>.qmd",)),
+            ("评审", "primary", ()),
+            ("回流", "success", ("谈定后",)),
+            ("evergreen", "success", ("当前 + 计划",))]
     stages = [K.stage(name, *subs, role=role) for name, role, subs in spec]
     flow = S.Row(*stages, gap=38, align="center")
-    git = K.stage("git: commit / PR", "history · rationale", role="warning")
+    git = K.stage("git: commit / PR", "历史 · 缘由", role="warning")
     root = S.Col(flow, S.Spacer(h=46), git, gap=0, align="center")
 
     def edges():
         out = [S.Route(stages[i].right, stages[i + 1].left, "mut", shape="line", ends="end")
                for i in range(len(stages) - 1)]
         out.append(S.Route(stages[3].bottom, git.top, "warning", shape="sweep", ends="end",
-                           label=("rationale", {"role": "warning", "size": 9.5})))
+                           label=("缘由", {"role": "warning", "size": 9.5})))
         return out
 
     return S.layout(root, S.Markers("mut", "warning"), edges, pad=18)

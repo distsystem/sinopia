@@ -4,7 +4,7 @@ project:
 
 website:
   title: "doc-driven-dev"
-  description: "Documentation as the working surface, with sinopia diagrams-as-code — a site that documents itself with its own tools."
+  description: "把文档当工作面,配 sinopia diagrams-as-code:一个用自己这套工具给自己写文档的站点。"
   search:
     location: navbar
     type: overlay
@@ -16,7 +16,7 @@ website:
     contents: auto                 # one entry point auto-discovers every page
   page-footer:
     left: "doc-driven-dev"
-    right: "Built with [Quarto](https://quarto.org) · figures by [sinopia](sinopia.qmd)"
+    right: "由 [Quarto](https://quarto.org) 构建 · 图表来自 [sinopia](sinopia.qmd)"
 
 filters:
   - _filters/rebase-readme-links.lua

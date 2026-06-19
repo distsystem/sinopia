@@ -1,3 +1,7 @@
+---
+order: 1
+---
+
 # 工作流
 
 文档是工作面:正式文档只装*当前与计划中*的状态,讨论以 gitignore 的草稿进行,草稿和正式页长得
@@ -6,7 +10,6 @@
 下面这条循环本身也是一张 sinopia 图,随本页构建时现场渲染:
 
 ```{python}
-#| echo: true
 #| output: asis
 import sinopia as S
 from sinopia.quarto import emit
@@ -50,6 +53,18 @@ emit(S.layout(root, S.Markers("mut", "warning"), links, pad=18))
 :::
 ::::
 :::::
+
+evergreen 的具体戒律,逐条避开 **change-voice**:相对时间锚(`目前` / `现在` / `最近` / `不再` /
+`以前` / `曾经`)、变更动词(`新增` / `已 drop` / `替换为` / `改名为` / `撤回` / `移除`)、过去时
+报告(`测过` / `先前验证`)、跟旧设计对比(`跟老的 X 一样` / `原名 Y`)。改写成陈述事实(`X 是
+Y`)、设计原则(`不引入 X` / `没有 Y`,现在时的负面陈述,不暗示曾经存在)、历史走链接(从 callout
+引 ADR 或 commit hash,正文保持 timeless)。例外:CHANGELOG、release notes、迁移指南本身就是变更
+史,不受此约束。
+
+计划中的内容并排在正文里,靠标题徽章区分:`## 缓存层 [PLAN]{.badge .text-bg-secondary}`。`[TODO]`
+标小而具体的缺口,`[PLAN]` 标设计好但未建的整节,嵌套的计划标题各挂各的。正文照现在时写(`缓存
+存放…`,不写 `将会加缓存`):徽章本身表示"未建",落地时删掉徽章即回流,一行之差。计划中的工作
+留在正文,不另开 `proposals/` 树。
 
 ## 讨论先成草稿,谈定再回流
 

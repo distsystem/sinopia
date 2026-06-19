@@ -23,6 +23,9 @@ filters:
   - _filters/compare-option.lua
   - _filters/sinopia-carrier.lua   # stash figure SVG in a <script> so deno-dom can't mangle it
 
+execute:
+  echo: false        # rendered pages show the figure, not the code that draws it
+
 format:
   html:
     theme:

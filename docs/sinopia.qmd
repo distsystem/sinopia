@@ -1,12 +1,15 @@
+---
+order: 3
+---
+
 # sinopia
 
 一张图是一棵小小的 Python 模型树,渲染成 SVG:摆好位置的 `Box` 暴露具名锚点,形状带语义角色,
 连线自己算控制点。输出内联进页面,并跟随其明暗主题。
 
-整套想法浓缩在一张图里,由旁边的代码画出、随页面构建时现场渲染:
+整套想法浓缩在下面这张图里,随页面构建由 sinopia 现场生成,代码不入页面、只留图:
 
 ```{python}
-#| echo: true
 #| output: asis
 import sinopia as S
 from sinopia.quarto import emit
@@ -44,7 +47,6 @@ emit(fig)
 :::::
 
 ```{python}
-#| echo: true
 #| output: asis
 import sinopia as S
 from sinopia.quarto import emit
@@ -169,7 +171,6 @@ emit(S.Figure(...))     # 渲染,再裹进 {=html} 裸块
 树、产出 SVG。闭集选项(`kind`、`shape`、`align`)带类型,所以填错值是构造期错误,而非静默画错。
 
 ```{python}
-#| echo: true
 #| output: asis
 import sinopia as S
 from sinopia.quarto import emit

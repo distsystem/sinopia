@@ -1,18 +1,54 @@
+---
+order: 2
+---
+
 # 写作机制
 
-这个站点用一小套 Quarto 加 Bootstrap 词汇写成,不手搓 CSS,也不另起新格式或滤镜。下面是它依赖
-的机制;沿用既有的,胜过另立一套。
+这个站点用一小套 Quarto 加 Bootstrap 词汇写成,不手搓 CSS,也不另起新格式或滤镜。沿用既有的,
+胜过另立一套。下面是它依赖的机制。
+
+## 渲染与预览
+
+走 pixi 任务(它们先跑 `setup`,幂等地拉扩展):
+
+```bash
+pixi run preview     # http://localhost:4850,存盘热重载
+pixi run render      # 一次性静态构建到 _site/
+```
+
+不用任务时的原生 Quarto:
+
+```bash
+quarto check                 # 体检环境
+quarto preview               # 整个项目,热重载
+quarto preview path/doc.qmd  # 只看一页
+quarto render path/doc.qmd   # 只构建一页
+```
+
+`quarto preview` 盯着项目、每次存盘都重载浏览器,`drafts/` 下的草稿也在内。开一个标签页就够,
+不需要浏览器自动化。
 
 ## 页面约定
 
 正文页用一个裸 `#` 标题,不写 YAML `title:`,这样每页的 h1 都是同一号字(正文里的
-`section.level1`)。给某页加 `title:` frontmatter 会把它切成更大的标题块,破坏页与页的一致。主页
-`index.qmd` 是例外:它带 `title:` / `description:` / `toc: false`,可见的 h1 来自被 include 进来
-的 README。
+`section.level1`)。加 `title:` frontmatter 会切成更大的标题块,破坏页与页的一致。主页 `index.qmd`
+是例外:它带 `title:` / `description:` / `toc: false`,可见 h1 来自被 include 进来的 README;
+`drafts/` 下的草稿也可带 `title:` / `subtitle:`,它们不算正式页集。
+
+侧栏顺序由各页的 `order:` frontmatter 决定(不写则按字母序排在带 `order` 的之后),`order` 不是
+`title`,不破坏裸 `#` 约定。
+
+## 问题驱动的结构
 
 每节先摆普通做法卡在哪(before),再给本项目的形状(after);展示之前不要先评判普通做法。
 before/after 读起来像 `::: {.grid}` 里一个 `.callout-warning`(普通陷阱)挨着一个 `.callout-tip`
-(本项目的答案),[工作流](workflow.qmd) 与 [sinopia](sinopia.qmd) 都这么写。
+(本项目的答案)。机制页(纯模型,没有"普通对应物")则直接给图,不摆 before/after。
+
+常见的三页骨架:
+
+- **薄 README 主页**:同时当 GitHub 门面,`{{< include >}}` 进 `index.qmd`。
+- **范式 / how-to 页**:一个痛点一节,各自 before/after。
+- **机制 / 模型页**:底层模型;图无需 before/after。
 
 ## 围栏 div 与属性
 
@@ -48,25 +84,26 @@ before/after 读起来像 `::: {.grid}` 里一个 `.callout-warning`(普通陷�
 
 种类:`note`、`tip`、`important`、`caution`、`warning`。
 
-## 栅格与对比卡
+## 作图词汇(复用,不手搓)
 
-Quarto 自带 12 列 Bootstrap 栅格。`::: {.grid}` 是行,子项带 `.g-col-{n}` 及响应式变体如
-`.g-col-md-6`。三路裁决的并排对比用 `.compare-option` 滤镜:
+优先用 Bootstrap 5.3 加 Quarto 原生类;复用靠 Lua 滤镜,而非反复粘工具类串。
 
-```markdown
-::: {.grid}
-::: {.compare-option verdict=danger tag="O(n²)" title="全表扫描" label="慢"}
-正文
-:::
-::: {.compare-option verdict=success tag="索引" title="B-tree" label="快"}
-正文
-:::
-:::
-```
+| 用途 | 写法 |
+|---|---|
+| 三路裁决对比 | `::: {.compare-option verdict=danger\|warning\|success tag="…" title="…" label="…"}` |
+| callout | `.callout-{note,tip,important,caution,warning}`,可加 `collapse=true title="…"` |
+| 两列 | `::: {.grid}` + `::: {.g-col-12 .g-col-md-6}` |
+| 行内徽章 | `[文字]{.badge .text-bg-{danger,warning,success,secondary}}`(`secondary` 用于 `[PLAN]`/`[TODO]` 标记) |
+| 定义列表 | `[术语]{.smallcaps}` 后跟一行 `: 定义` |
 
-滤镜把每张卡铺成 `.g-col-12 .g-col-md-4`,桌面三张一行、手机堆叠。重复的工具类串(七个类以上)
-不要再粘一遍,写成 `_filters/` 下的 Lua 滤镜,像 `compare-option.lua` 那样。别用 `.panel-tabset`
-做选项对比:它把未选中的页藏起来,丢了并排看的意义。
+`.compare-option` 滤镜把每张卡铺成 `.g-col-12 .g-col-md-4`,桌面三张一行、手机堆叠。
+
+避免:
+
+- 正文里写死颜色:行内 `style` 颜色或 hex 字面会破坏明暗切换(生成的 SVG 图是受控的例外,见下)。
+- 长工具类串(七个类以上)做对齐:写成 Lua 滤镜,像 `_filters/compare-option.lua`。
+- 用 `.panel-tabset` 做选项对比:它藏起未选中的页,丢了并排看的意义。
+- 在 `.card` 里放 Markdown 标题(`####`):Pandoc 会包一层 `<section>`、弄坏 flex 布局。
 
 ## 交叉引用与引文
 
@@ -79,20 +116,19 @@ Quarto 自带 12 列 Bootstrap 栅格。`::: {.grid}` 是行,子项带 `.g-col-{
 ```
 
 id 前缀:`#fig-`、`#tbl-`、`#eq-`、`#sec-`(需 `number-sections`)、`#thm-`。一次性的外部来源,
-优先用散在该节的脚注,而非集中的参考页。要引文则设 `bibliography:`,用 `[@key]` 引,放一个
+优先用散在该节的脚注,而非集中的参考页。要正式引文则设 `bibliography:`,用 `[@key]` 引,放一个
 `::: {#refs} :::` 收集列表。
 
-## include 与可执行代码
+## include、可执行代码与扩展
 
-`{{< include ../README.md >}}` 把仓库 README 拉进 `index.qmd`,于是 GitHub 与站点共用一张首页;
+`{{< include ../README.md >}}` 把仓库 README 拉进 `index.qmd`,GitHub 与站点共用一张首页;
 `rebase-readme-links` 滤镜把 README 里 `docs/X.qmd` 形式的链接改写成站内可达。
 
 大多数 evergreen 散文用静态代码块(`` ```python ``)做示意,无需引擎;只有当输出必须由真实代码
 算出(如 sinopia 图)才用 `#|` 可执行单元。
 
-## 扩展
-
-每个扩展在 `setup` 任务里用 `test -d` 守卫声明,幂等:
+扩展在 `setup` 任务里用 `test -d` 守卫声明,幂等;`_extensions/` 进 gitignore,新克隆首次 setup
+下载:
 
 ```toml
 [tasks.setup]
@@ -102,8 +138,6 @@ test -d _extensions/owner/repo || quarto add --no-prompt owner/repo
 """
 ```
 
-`_extensions/` 进 gitignore,新克隆在首次 setup 时下载。
-
 ## 语气
 
 陈述、力求精确。三个习惯要避开:破折号当旁白或同位插入,改用冒号、分号、句号或重组句子;速记
@@ -112,5 +146,20 @@ evergreen 的"写当前、不写变更史"是更上位的纪律,见 [工作流](
 
 ## 图不手写
 
-非平凡的图用 [sinopia](sinopia.qmd) 在 Python 里生成,内联进页面,颜色走 `var(--bs-*)` 跟随明暗
-主题,而不是手敲 SVG 或贴死 hex。
+非平凡的图用 [sinopia](sinopia.qmd) 在 Python 里生成,内联进页面跟随主题,而不是手敲 SVG。颜色只
+走 `var(--bs-body-color)` 与 `var(--bs-<语义>)`(`primary`/`success`/`warning`/`danger`/`info`),
+柔填用 `fill-opacity`;`<svg>` 上的行内尺寸(`width`/`max-width`/`font-size`)无妨,但颜色必须由
+主题驱动。绝不写死 hex(自包含的 `PALETTE` 图是有意的例外),也别用 `--bs-*-bg-subtle` /
+`--bs-*-text-emphasis`(暗主题不重映射它们)。内联走 ```` ```{=html} ```` 裸块,只有内联的 SVG 才
+认 `var(--bs-*)`。
+
+图表单元默认隐藏代码(`_quarto.yml` 的 `execute: echo: false`):最终网页只显示图,不显示画它的
+Python。讲 API 的静态代码块不受 `echo` 影响,照常可见 —— 该看的代码留着,画图的噪音省掉。
+
+## 官方文档
+
+- Markdown 基础:<https://quarto.org/docs/authoring/markdown-basics.html>
+- 交叉引用:<https://quarto.org/docs/authoring/cross-references.html>
+- 脚注与引文:<https://quarto.org/docs/authoring/footnotes-and-citations.html>
+- 网站导航:<https://quarto.org/docs/websites/website-navigation.html>
+- 项目:<https://quarto.org/docs/projects/quarto-projects.html>

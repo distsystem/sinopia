@@ -6,11 +6,30 @@
 下面这条循环本身也是一张 sinopia 图,随本页构建时现场渲染:
 
 ```{python}
-#| echo: false
+#| echo: true
 #| output: asis
-import figures
-from figkit import show
-show(figures.loop())
+import sinopia as S
+from figkit import stage, show
+
+spec = [("讨论", "secondary", ()),
+        ("草稿", "primary", ("drafts/<slug>.qmd",)),
+        ("评审", "primary", ()),
+        ("回流", "success", ("谈定后",)),
+        ("evergreen", "success", ("当前 + 计划",))]
+stages = [stage(name, *subs, role=role) for name, role, subs in spec]
+git = stage("git: commit / PR", "历史 · 缘由", role="warning")
+root = S.Col(S.Row(*stages, gap=38, align="center"), S.Spacer(h=46), git, gap=0, align="center")
+
+
+def links():
+    out = [S.Route(stages[i].right, stages[i + 1].left, "mut", shape="line", ends="end")
+           for i in range(len(stages) - 1)]
+    out.append(S.Route(stages[3].bottom, git.top, "warning", shape="sweep", ends="end",
+                       label=("缘由", {"role": "warning", "size": 9.5})))
+    return out
+
+
+show(S.layout(root, S.Markers("mut", "warning"), links, pad=18))
 ```
 
 ## 文档写当前,不写变更史

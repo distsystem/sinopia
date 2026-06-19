@@ -44,11 +44,23 @@ show(fig)
 :::::
 
 ```{python}
-#| echo: false
+#| echo: true
 #| output: asis
-import figures
-from figkit import show
-show(figures.layout_engine())
+import sinopia as S
+from figkit import stage, show
+
+declare = stage("declare", "Row / Col / Grid", "of Box + Node", role="primary")
+compute = stage("layout()", "stretchable computes", "x / y / w / h", role="success")
+connect = stage("anchors", "node.right / .center", "feed Route", role="warning")
+flow = S.Row(declare, compute, connect, gap=44, align="center")
+
+
+def links():
+    return [S.Route(declare.right, compute.left, "mut", shape="line", ends="end"),
+            S.Route(compute.right, connect.left, "mut", shape="line", ends="end")]
+
+
+show(S.layout(flow, S.Markers("mut"), links, pad=18))
 ```
 
 ## 按锚点连线,而非按坐标
@@ -91,7 +103,33 @@ show(figures.layout_engine())
 树、产出 SVG。闭集选项(`kind`、`shape`、`align`)带类型,所以填错值是构造期错误,而非静默画错。
 
 ```{python}
-#| echo: false
+#| echo: true
 #| output: asis
-show(figures.model_tree())
+import sinopia as S
+from figkit import stage, band, show
+
+fig = stage("Figure", "the svg root", role="primary")
+shapes = S.Node(("Drawable models", {"weight": True, "size": 11.5}),
+                ("Rect · Band · Card", {"role": "mut", "size": 9.5}),
+                ("Text · RichText · RawPath", {"role": "mut", "size": 9.5}),
+                ("Route · Markers", {"role": "mut", "size": 9.5}),
+                role="primary", kind="card")
+elements = S.Node(("Element models", {"weight": True, "size": 11.5}),
+                  ("Row · Col · Grid", {"role": "mut", "size": 9.5}),
+                  ("Node · Label · Spacer · Cell", {"role": "mut", "size": 9.5}),
+                  ("layout() computes geometry", {"role": "mut", "size": 9.5}),
+                  role="success", kind="card")
+out = band("render() → themed SVG · var(--bs-*)", role="secondary")
+root = S.Col(fig, S.Spacer(h=28), S.Row(shapes, elements, gap=40, align="start"),
+             S.Spacer(h=24), out, gap=0, align="center")
+
+
+def links():
+    return [S.Route(fig.bottom, shapes.top, "mut", shape="sweep", ends="end"),
+            S.Route(fig.bottom, elements.top, "mut", shape="sweep", ends="end"),
+            S.Route(shapes.bottom, out.top, "mut", shape="sweep", ends="end"),
+            S.Route(elements.bottom, out.top, "mut", shape="sweep", ends="end")]
+
+
+show(S.layout(root, S.Markers("mut"), links, pad=18))
 ```

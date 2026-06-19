@@ -32,6 +32,21 @@ description = "Render, then open the static site in the browser (file://, no ser
 cmd = "xdg-open docs/_site/index.html"
 depends-on = ["render"]
 
+[tasks.link-skill]
+description = "Symlink one skill (docs/<name>) into ~/.claude/skills"
+args = ["name"]
+cmd = """
+mkdir -p $HOME/.claude/skills
+ln -sfn $PIXI_PROJECT_ROOT/docs/{{ name }} $HOME/.claude/skills/{{ name }}
+"""
+
+[tasks.link-skills]
+description = "Symlink this project's skills into ~/.claude/skills — a dynamic global install"
+depends-on = [
+  { task = "link-skill", args = ["sinopia"] },
+  { task = "link-skill", args = ["doc-driven-dev"] },
+]
+
 [package]
 name = "sinopia"
 version = "0.4.0"

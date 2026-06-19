@@ -13,10 +13,6 @@ attrs = ">=23.1,<26"    # jupyter would pull attrs 26; stretchable caps it below
 [pypi-dependencies]
 stretchable = ">=1.1.8"   # PyPI-only; absent from conda-forge
 
-[tasks]
-channels = "python examples/channels.py"
-neovim-model = "python examples/neovim_model.py"
-
 [tasks.setup]
 description = "Fetch Quarto extensions (best-effort; the docs render without them offline)."
 cwd = "docs"

@@ -26,9 +26,8 @@
 ## 运行文档
 
 ```bash
-cd docs
 pixi run preview     # http://localhost:4850,热重载
 pixi run render      # 一次性静态构建到 _site/
 ```
 
-docs 环境带着 Quarto 和一个 editable 安装的 sinopia,所以图表 cell 会执行并内联其 SVG。
+项目环境自带 Quarto 和一个 editable 安装的 sinopia,所以图表 cell 会执行并内联其 SVG。

@@ -26,8 +26,8 @@ filters:
 format:
   html:
     theme:
-      light: [flatly, styles-light.scss]
-      dark: [darkly, styles.scss]
+      light: [flatly, _styles/styles-light.scss]
+      dark: [darkly, _styles/styles.scss]
     toc: true
     toc-depth: 3
     toc-location: right

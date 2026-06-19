@@ -7,7 +7,7 @@ subtitle: "the decision this draft is driving"
      Copy this file to drafts/<slug>.qmd and fill it in. One slug per topic,
      reused for the whole session so the open tab just reloads. The underscore
      prefix makes Quarto skip THIS template, so it never renders as a page.
-     `quarto preview` hot-reloads <slug>.qmd in the browser on every save.
+     Re-render with `pixi run render` and refresh the browser to view <slug>.qmd.
      This is a discussion artifact, not final docs: once the shape is agreed,
      reflow it into the evergreen main docs and delete this draft. -->
 

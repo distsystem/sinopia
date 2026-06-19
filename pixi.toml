@@ -21,17 +21,16 @@ mkdir -p _extensions &&
 test -d _extensions/mcanouil/quarto-iconify || quarto add --no-prompt mcanouil/quarto-iconify || true
 """
 
-[tasks.preview]
-description = "Live preview with hot reload on http://localhost:4850"
-cwd = "docs"
-cmd = "quarto preview --port 4850"
-depends-on = ["setup"]
-
 [tasks.render]
 description = "One-shot static build to _site/"
 cwd = "docs"
 cmd = "quarto render"
 depends-on = ["setup"]
+
+[tasks.open]
+description = "Render, then open the static site in the browser (file://, no server)"
+cmd = "xdg-open docs/_site/index.html"
+depends-on = ["render"]
 
 [package]
 name = "sinopia"

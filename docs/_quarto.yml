@@ -1,6 +1,10 @@
 project:
   type: website
   output-dir: _site
+  execute-dir: project           # cells run from docs/ so subfolder pages can import figkit
+  render:                        # SKILL.md files are skill manifests, not site pages
+    - "*.qmd"
+    - "*/*.qmd"
 
 website:
   title: "doc-driven-dev"
@@ -16,7 +20,7 @@ website:
     contents: auto                 # one entry point auto-discovers every page
   page-footer:
     left: "doc-driven-dev"
-    right: "由 [Quarto](https://quarto.org) 构建 · 图表来自 [sinopia](sinopia.qmd)"
+    right: "由 [Quarto](https://quarto.org) 构建 · 图表来自 [sinopia](sinopia/sinopia.qmd)"
 
 filters:
   - _filters/rebase-readme-links.lua

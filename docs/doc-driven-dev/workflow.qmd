@@ -1,7 +1,3 @@
----
-order: 1
----
-
 # 工作流
 
 文档是工作面:正式文档只装*当前与计划中*的状态,讨论以 gitignore 的草稿进行,草稿和正式页长得
@@ -78,7 +74,7 @@ Y`)、设计原则(`不引入 X` / `没有 Y`,现在时的负面陈述,不暗示
 :::: {.g-col-12 .g-col-md-6}
 ::: {.callout-tip title="草稿"}
 讨论落进 `docs/drafts/<slug>.qmd`:gitignore、套站点主题,因此和正式页长得一样,谈定后回流近乎
-零成本。`quarto preview` 存盘即热重载,开一个标签页就够。谈定后把结构移进 evergreen 正文,删掉
+零成本。改完 `pixi run render`、刷新页面即可,开一个标签页就够。谈定后把结构移进 evergreen 正文,删掉
 草稿。
 :::
 ::::
@@ -95,5 +91,5 @@ commit 或 PR,不进文档。
 ## 单一入口
 
 侧栏 `contents: auto` 自动列出每一页,配 navbar 的浮层搜索。加一页 `docs/<page>.qmd` 就可被发现,
-无需维护索引。图表则不手写:用 sinopia 在 Python 里组合、内联进页面(见 [sinopia](sinopia.qmd)),
+无需维护索引。图表则不手写:用 sinopia 在 Python 里组合、内联进页面(见 [sinopia](../sinopia/sinopia.qmd)),
 随构建现场渲染,因此文档与代码不会各自漂移。

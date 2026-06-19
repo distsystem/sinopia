@@ -9,7 +9,8 @@
 #| echo: true
 #| output: asis
 import sinopia as S
-from figkit import stage, show
+from sinopia.quarto import emit
+from figkit import stage
 
 spec = [("讨论", "secondary", ()),
         ("草稿", "primary", ("drafts/<slug>.qmd",)),
@@ -29,7 +30,7 @@ def links():
     return out
 
 
-show(S.layout(root, S.Markers("mut", "warning"), links, pad=18))
+emit(S.layout(root, S.Markers("mut", "warning"), links, pad=18))
 ```
 
 ## 文档写当前,不写变更史

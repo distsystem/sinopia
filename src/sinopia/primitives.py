@@ -2,6 +2,8 @@
 returns its SVG string; a figure is a tree of these, rendered at the end. Pure-string output,
 so colors stay `var(--bs-*)` (theme-aware when inlined) unless `PALETTE` is filled with hex.
 """
+import pathlib
+
 from pydantic import BaseModel, ConfigDict
 
 from sinopia.types import Anchor, Ends, Point, Role, Seg
@@ -254,3 +256,9 @@ class Figure(Drawable):
                 f'xmlns="http://www.w3.org/2000/svg" '
                 f'font-family="-apple-system,BlinkMacSystemFont,\'Segoe UI\','
                 f"'Noto Sans CJK SC',sans-serif\">\n" + body + "\n</svg>\n")
+
+    def _repr_html_(self) -> str:
+        return self.render()
+
+    def save(self, path: str | pathlib.Path) -> None:
+        pathlib.Path(path).write_text(self.render(), encoding="utf-8")

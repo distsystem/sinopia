@@ -35,7 +35,7 @@ depends-on = ["setup"]
 
 [package]
 name = "sinopia"
-version = "0.3.0"
+version = "0.4.0"
 
 [package.build]
 backend = { name = "pixi-build-python", version = "*" }

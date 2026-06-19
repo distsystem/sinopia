@@ -313,9 +313,10 @@ def _render_part(p) -> str:
     return _render(p)
 
 
-def layout(root, *parts, pad=16.0, cls="zfig") -> str:
-    """Build + compute `root`'s layout, then render it plus extra `parts` (drawables, strings, or
-    thunks that read placed elements' anchors — e.g. connectors). Returns the <svg> string."""
+def layout(root, *parts, pad=16.0, cls="zfig") -> Figure:
+    """Build + compute `root`'s layout, then compose it plus extra `parts` (drawables, strings, or
+    thunks that read placed elements' anchors — e.g. connectors) into a `Figure`. The same terminal
+    object as `Figure(...)`: call `.render()` for the SVG string, or rely on `_repr_html_`."""
     pairs = []
     st_root = StNode(padding=pad).add(root._build(pairs))
     st_root.compute_layout()
@@ -324,4 +325,4 @@ def layout(root, *parts, pad=16.0, cls="zfig") -> str:
         el._read_box(Box(b.x, b.y, b.width, b.height))
     rb = st_root.get_box(Edge.BORDER, relative=False)
     body = root.render() + "".join(_render_part(p) for p in parts)
-    return Figure(rb.width, rb.height, body, cls=cls).render()
+    return Figure(rb.width, rb.height, body, cls=cls)

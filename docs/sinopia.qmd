@@ -9,7 +9,7 @@
 #| echo: true
 #| output: asis
 import sinopia as S
-from figkit import show
+from sinopia.quarto import emit
 
 a = S.Box(24, 30, 150, 54)
 b = S.Box(316, 30, 150, 54)
@@ -23,7 +23,7 @@ fig = S.Figure(490, 120,
     S.Text(*b.at(.5, .72), "themed SVG", role="mut", size=9.5, anchor="middle"),
     S.Route(a.right, b.left, "primary", shape="sweep", label="layout() computes coords"),
 )
-show(fig)
+emit(fig)
 ```
 
 ## 摆布盒子,而非摆放坐标
@@ -47,7 +47,8 @@ show(fig)
 #| echo: true
 #| output: asis
 import sinopia as S
-from figkit import stage, show
+from sinopia.quarto import emit
+from figkit import stage
 
 declare = stage("declare", "Row / Col / Grid", "of Box + Node", role="primary")
 compute = stage("layout()", "stretchable computes", "x / y / w / h", role="success")
@@ -60,7 +61,7 @@ def links():
             S.Route(compute.right, connect.left, "mut", shape="line", ends="end")]
 
 
-show(S.layout(flow, S.Markers("mut"), links, pad=18))
+emit(S.layout(flow, S.Markers("mut"), links, pad=18))
 ```
 
 ## 按锚点连线,而非按坐标
@@ -131,32 +132,35 @@ root = S.Col(
     S.Node("NEOVIM", role="success", kind="rect"),
     gap=20, align="stretch")
 
-svg = S.layout(root, S.Markers("primary"),
+fig = S.layout(root, S.Markers("primary"),
     lambda: S.Route(root.children[0].bottom, root.children[1].top, "primary", shape="sweep"))
 ```
 
-排布后每个元素同样暴露锚点。跨盒子的连线写成 thunk(无参函数),`layout()` 先算几何、再调用它,
+`layout()` 和 `Figure(...)` 一样返回 `Figure`:`fig.render()` 取 SVG、`fig.save(path)` 落盘,或在
+notebook 里直接显示。排布后每个元素同样暴露锚点。跨盒子的连线写成 thunk(无参函数),`layout()` 先算几何、再调用它,
 此时锚点已就位。形状只认语义角色,解析成 `var(--bs-*)`(见上节);唯一写死 hex 的场合是要自包含
 的图,就地填 `S.PALETTE.update({"primary": "#4263eb"})`。
 
 ## 内联进页面
 
-`render()` 与 `layout()` 给出的是一段 SVG 字符串。要让它读到页面 CSS、跟随明暗主题,得在
-`#| output: asis` 单元里用 ```` ```{=html} ```` 裸块打印它,因为只有内联的 SVG 才认
+`Figure` 是终端对象:`render()` 给出一段 SVG 字符串,`layout()` 同样返回一个 `Figure`(声明式
+布局先算坐标),notebook 里末行写 `fig` 即经 `_repr_html_` 内联。要让 SVG 读到页面 CSS、跟随明暗
+主题,得在 `#| output: asis` 单元里用 ```` ```{=html} ```` 裸块打印它,因为只有内联的 SVG 才认
 `var(--bs-*)`。`_filters/sinopia-carrier.lua` 把这个块里的 SVG 暂存进 `<script>`,躲过 Quarto 的
-HTML 后处理(它会把 `viewBox` 这类 camelCase 属性小写、弄坏图)。整步收进 `figkit.show()`:
+HTML 后处理(它会把 `viewBox` 这类 camelCase 属性小写、弄坏图)。整步收进 `sinopia.quarto.emit()`:
 
 ```python
 #| output: asis
 import sinopia as S
-from figkit import show
-show(S.Figure(...))     # 渲染,再裹进 {=html} 裸块
+from sinopia.quarto import emit
+emit(S.Figure(...))     # 渲染,再裹进 {=html} 裸块
 ```
 
-`figkit` 是这个站点的作图词汇(`stage`、`band`、`show`):`Node(...)` 之上的薄 recipe,编码本站的
-口味(填充、字号)与领域名字,所以留在站点旁、不进 `sinopia`。引擎只给通用件:带主题的形状、
-锚点、连线、布局,不含编辑预设。判断归属:一个 helper 换到无关项目里仍说得通,归 `sinopia`;以
-你领域命名的,归你的图。
+`figkit` 是这个站点的作图词汇(`stage`、`band`):`Node(...)` 之上的薄 recipe,编码本站的口味
+(填充、字号)与领域名字,所以留在站点旁、不进 `sinopia`。Quarto 的内联传输(`sinopia.quarto.emit`
+配 `sinopia-carrier.lua`)与领域无关,任何 Quarto 项目都用得上,因此由 `sinopia` 的可选 `quarto`
+适配器提供,核心引擎本身对此传输无感知。判断归属:一个 helper 换到无关项目里仍说得通,归
+`sinopia`;以你领域命名的,归你的图。
 
 ## 模型树
 
@@ -168,7 +172,8 @@ show(S.Figure(...))     # 渲染,再裹进 {=html} 裸块
 #| echo: true
 #| output: asis
 import sinopia as S
-from figkit import stage, band, show
+from sinopia.quarto import emit
+from figkit import stage, band
 
 fig = stage("Figure", "the svg root", role="primary")
 shapes = S.Node(("Drawable models", {"weight": True, "size": 11.5}),
@@ -193,5 +198,5 @@ def links():
             S.Route(elements.bottom, out.top, "mut", shape="sweep", ends="end")]
 
 
-show(S.layout(root, S.Markers("mut"), links, pad=18))
+emit(S.layout(root, S.Markers("mut"), links, pad=18))
 ```

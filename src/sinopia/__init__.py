@@ -27,8 +27,9 @@ Two ways to place geometry:
 - Declarative `Row`/`Col`/`Grid` layout (coordinates computed); read anchors after layout:
     root = S.Col(S.Node("ZED", role="primary", kind="rect"),
                  S.Node("NEOVIM", role="success", kind="rect"), gap=20, align="stretch")
-    svg = S.layout(root, S.Markers("primary"),
+    fig = S.layout(root, S.Markers("primary"),
                    lambda: S.Route(root.children[0].bottom, root.children[1].top, "primary", shape="sweep"))
+    # `fig` is a `Figure`: `fig.render()` for SVG, `fig.save(path)`, or display via `_repr_html_`.
 """
 from sinopia.arrange import PAD as PAD
 from sinopia.arrange import LINE_H as LINE_H
@@ -56,4 +57,4 @@ from sinopia.primitives import color as color
 from sinopia.primitives import mid as mid
 from sinopia.route import Route as Route
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"

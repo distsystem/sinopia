@@ -1,0 +1,116 @@
+# 写作机制
+
+这个站点用一小套 Quarto 加 Bootstrap 词汇写成,不手搓 CSS,也不另起新格式或滤镜。下面是它依赖
+的机制;沿用既有的,胜过另立一套。
+
+## 页面约定
+
+正文页用一个裸 `#` 标题,不写 YAML `title:`,这样每页的 h1 都是同一号字(正文里的
+`section.level1`)。给某页加 `title:` frontmatter 会把它切成更大的标题块,破坏页与页的一致。主页
+`index.qmd` 是例外:它带 `title:` / `description:` / `toc: false`,可见的 h1 来自被 include 进来
+的 README。
+
+每节先摆普通做法卡在哪(before),再给本项目的形状(after);展示之前不要先评判普通做法。
+before/after 读起来像 `::: {.grid}` 里一个 `.callout-warning`(普通陷阱)挨着一个 `.callout-tip`
+(本项目的答案),[工作流](workflow.qmd) 与 [sinopia](sinopia.qmd) 都这么写。
+
+## 围栏 div 与属性
+
+结构来自围栏 div(`::: {.class key=value}`)与 Pandoc 属性表(`{#id .class key=value}`)。嵌套靠
+给围栏多加冒号:
+
+```markdown
+::::: {.grid}
+:::: {.g-col-12 .g-col-md-6}
+左列
+::::
+:::: {.g-col-12 .g-col-md-6}
+右列
+::::
+:::::
+```
+
+## callout
+
+```markdown
+::: {.callout-tip}
+正文
+:::
+
+::: {.callout-important appearance="simple"}
+没有标题栏的一行提示
+:::
+
+::: {.callout-note collapse="true" title="细节"}
+可折叠正文
+:::
+```
+
+种类:`note`、`tip`、`important`、`caution`、`warning`。
+
+## 栅格与对比卡
+
+Quarto 自带 12 列 Bootstrap 栅格。`::: {.grid}` 是行,子项带 `.g-col-{n}` 及响应式变体如
+`.g-col-md-6`。三路裁决的并排对比用 `.compare-option` 滤镜:
+
+```markdown
+::: {.grid}
+::: {.compare-option verdict=danger tag="O(n²)" title="全表扫描" label="慢"}
+正文
+:::
+::: {.compare-option verdict=success tag="索引" title="B-tree" label="快"}
+正文
+:::
+:::
+```
+
+滤镜把每张卡铺成 `.g-col-12 .g-col-md-4`,桌面三张一行、手机堆叠。重复的工具类串(七个类以上)
+不要再粘一遍,写成 `_filters/` 下的 Lua 滤镜,像 `compare-option.lua` 那样。别用 `.panel-tabset`
+做选项对比:它把未选中的页藏起来,丢了并排看的意义。
+
+## 交叉引用与引文
+
+给目标一个带类型的 id,再用 `@id` 引用:
+
+```markdown
+![标题](img.png){#fig-x}
+
+见 @fig-x。
+```
+
+id 前缀:`#fig-`、`#tbl-`、`#eq-`、`#sec-`(需 `number-sections`)、`#thm-`。一次性的外部来源,
+优先用散在该节的脚注,而非集中的参考页。要引文则设 `bibliography:`,用 `[@key]` 引,放一个
+`::: {#refs} :::` 收集列表。
+
+## include 与可执行代码
+
+`{{< include ../README.md >}}` 把仓库 README 拉进 `index.qmd`,于是 GitHub 与站点共用一张首页;
+`rebase-readme-links` 滤镜把 README 里 `docs/X.qmd` 形式的链接改写成站内可达。
+
+大多数 evergreen 散文用静态代码块(`` ```python ``)做示意,无需引擎;只有当输出必须由真实代码
+算出(如 sinopia 图)才用 `#|` 可执行单元。
+
+## 扩展
+
+每个扩展在 `setup` 任务里用 `test -d` 守卫声明,幂等:
+
+```toml
+[tasks.setup]
+cmd = """
+mkdir -p _extensions &&
+test -d _extensions/owner/repo || quarto add --no-prompt owner/repo
+"""
+```
+
+`_extensions/` 进 gitignore,新克隆在首次 setup 时下载。
+
+## 语气
+
+陈述、力求精确。三个习惯要避开:破折号当旁白或同位插入,改用冒号、分号、句号或重组句子;速记
+符号(`=`、`+`、`→`)与临时缩写留在公式或代码块里,正文写成文字;口语填充换成书面陈述。
+evergreen 的"写当前、不写变更史"是更上位的纪律,见 [工作流](workflow.qmd)。
+
+## 图不手写
+
+非平凡的图用 [sinopia](sinopia.qmd) 在 Python 里生成,内联进页面,颜色走 `var(--bs-*)` 跟随明暗
+主题,而不是手敲 SVG 或贴死 hex。

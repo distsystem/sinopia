@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: _site
+  render:                # SKILL.md is the skill manifest, not a site page
+    - "*.qmd"
+    - "drafts/*.qmd"
 
 website:
   title: "doc-driven-dev"

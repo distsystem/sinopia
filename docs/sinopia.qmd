@@ -96,6 +96,68 @@ show(S.layout(flow, S.Markers("mut"), links, pad=18))
 ::::
 :::::
 
+## 写一张图
+
+两种摆放几何的方式,按图的规整程度二选一。
+
+**手摆 `Box`,直接渲染。** 自己给坐标,适合盒子不多、版面已在脑中的图:
+
+```python
+import sinopia as S
+
+a = S.Box(40, 40, 200, 70)
+b = S.Box(440, 60, 200, 70)
+svg = S.Figure(720, 200,
+    S.Markers("primary"),                      # 箭头按角色注册一次
+    S.Rect(a, "success"),
+    S.Text(*a.center, "Neovim", role="success", weight=True, anchor="middle"),
+    S.Rect(b, "primary"),
+    S.Route(a.right, b.left, "primary", shape="sweep", label="winid ⟷ Editor"),
+).render()
+```
+
+`Box` 暴露 `left` / `right` / `top` / `bottom` / `center` 等锚点,也可用 `at(fx, fy)` 取任意比例
+点;`Route` 接两个锚点,按 `shape`(`sweep` 缓弧、`-|` 折角、`z` 双折、`n` U 形……)自算控制点。
+连线因此引用几何,挪动盒子时随之而动。
+
+**声明布局,让 `layout()` 算坐标。** 盒子一多、要对齐成行列或网格,就用 `Row` / `Col` / `Grid`
+声明嵌套,坐标交给布局引擎:
+
+```python
+import sinopia as S
+
+root = S.Col(
+    S.Node("ZED", role="primary", kind="rect"),
+    S.Node("NEOVIM", role="success", kind="rect"),
+    gap=20, align="stretch")
+
+svg = S.layout(root, S.Markers("primary"),
+    lambda: S.Route(root.children[0].bottom, root.children[1].top, "primary", shape="sweep"))
+```
+
+排布后每个元素同样暴露锚点。跨盒子的连线写成 thunk(无参函数),`layout()` 先算几何、再调用它,
+此时锚点已就位。形状只认语义角色,解析成 `var(--bs-*)`(见上节);唯一写死 hex 的场合是要自包含
+的图,就地填 `S.PALETTE.update({"primary": "#4263eb"})`。
+
+## 内联进页面
+
+`render()` 与 `layout()` 给出的是一段 SVG 字符串。要让它读到页面 CSS、跟随明暗主题,得在
+`#| output: asis` 单元里用 ```` ```{=html} ```` 裸块打印它,因为只有内联的 SVG 才认
+`var(--bs-*)`。`_filters/sinopia-carrier.lua` 把这个块里的 SVG 暂存进 `<script>`,躲过 Quarto 的
+HTML 后处理(它会把 `viewBox` 这类 camelCase 属性小写、弄坏图)。整步收进 `figkit.show()`:
+
+```python
+#| output: asis
+import sinopia as S
+from figkit import show
+show(S.Figure(...))     # 渲染,再裹进 {=html} 裸块
+```
+
+`figkit` 是这个站点的作图词汇(`stage`、`band`、`show`):`Node(...)` 之上的薄 recipe,编码本站的
+口味(填充、字号)与领域名字,所以留在站点旁、不进 `sinopia`。引擎只给通用件:带主题的形状、
+锚点、连线、布局,不含编辑预设。判断归属:一个 helper 换到无关项目里仍说得通,归 `sinopia`;以
+你领域命名的,归你的图。
+
 ## 模型树
 
 一张图在成为字符串之前,先是一个值。`Figure` 持有一棵树:frozen 的 `Drawable` 形状(`Rect`、

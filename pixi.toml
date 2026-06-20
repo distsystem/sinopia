@@ -18,7 +18,7 @@ description = "Fetch Quarto extensions (best-effort; the docs render without the
 cwd = "docs"
 cmd = """
 mkdir -p _extensions &&
-test -d _extensions/mcanouil/quarto-iconify || quarto add --no-prompt mcanouil/quarto-iconify || true
+test -d _extensions/mcanouil/iconify || quarto add --no-prompt mcanouil/quarto-iconify || true
 """
 
 [tasks.render]

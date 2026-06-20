@@ -1,52 +1,25 @@
 project:
   type: website
-  output-dir: _site
-  execute-dir: project           # cells run from docs/ so subfolder pages can import figkit
-  render:                        # SKILL.md files are skill manifests, not site pages
+  execute-dir: project     # subfolder pages import figkit from docs/
+  render:                  # only .qmd are pages; SKILL.md is a manifest (.md renders by default)
     - "*.qmd"
     - "*/*.qmd"
+    - "skills/*/*.qmd"
 
 website:
   title: "doc-driven-dev"
-  description: "把文档当工作面,配 sinopia diagrams-as-code:一个用自己这套工具给自己写文档的站点。"
-  search:
-    location: navbar
-    type: overlay
-  navbar:
-    background: dark
-    pinned: false   # scroll away with the page; a pinned opaque bar overlaps tall figures
   sidebar:
-    style: docked
-    contents: auto                 # one entry point auto-discovers every page
-  page-footer:
-    left: "doc-driven-dev"
-    right: "由 [Quarto](https://quarto.org) 构建 · 图表来自 [sinopia](sinopia/sinopia.qmd)"
+    contents: auto         # single entry auto-discovers every page
 
 filters:
   - _filters/rebase-readme-links.lua
   - _filters/compare-option.lua
-  - _filters/sinopia-carrier.lua   # stash figure SVG in a <script> so deno-dom can't mangle it
+  - _filters/sinopia-carrier.lua
 
 execute:
-  echo: false        # rendered pages show the figure, not the code that draws it
+  echo: false              # pages show the figure, not the code that draws it
 
 format:
   html:
     theme:
-      light: [flatly, _styles/styles-light.scss]
-      dark: [darkly, _styles/styles.scss]
-    toc: true
-    toc-depth: 3
-    toc-location: right
-    code-block-bg: true
-    code-block-border-left: false
-    code-copy: true
-    code-overflow: wrap
-    highlight-style:
-      light: github
-      dark: github-dark
-    anchor-sections: true
-    smooth-scroll: true
-    link-external-newwindow: true
-    mainfont: "-apple-system, BlinkMacSystemFont, Segoe UI, system-ui, sans-serif"
-    monofont: "JetBrains Mono, SF Mono, Menlo, Consolas, monospace"
+      - _styles/kami.scss

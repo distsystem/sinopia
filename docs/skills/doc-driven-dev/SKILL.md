@@ -17,9 +17,9 @@ it teaches. The pages carry the skill — read their `.qmd` source:
 
 **Depends on the `sinopia` skill** for figures: diagrams are generated as code, not
 hand-drawn. See `../sinopia/SKILL.md` and `../sinopia/sinopia.qmd`. The figure helpers in
-`../figkit.py` are this site's own vocabulary over the sinopia engine; keep a project's own
+`../../figkit.py` are this site's own vocabulary over the sinopia engine; keep a project's own
 helpers beside its figures, not in sinopia.
 
-To adopt the workflow in another project, copy the site machinery (`../_quarto.yml`,
-`../_filters/`, `../_styles/`, `../index.qmd`, `../drafts/_template.qmd`), edit the
+To adopt the workflow in another project, copy the site machinery (`../../_quarto.yml`,
+`../../_filters/`, `../../_styles/`, `../../index.qmd`, `../../drafts/_template.qmd`), edit the
 `_quarto.yml` title and the `index.qmd` home, then write pages following `authoring.qmd`.

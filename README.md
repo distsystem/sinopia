@@ -8,10 +8,10 @@
 
 - **工作流** —— 单一入口的 [Quarto](https://quarto.org) 文档库,只装*当前与计划中*的状态。讨论以
   gitignore 的草稿进行,草稿和正式文档长得一模一样,谈定后回流进 evergreen 页面;历史与缘由交给
-  git,不进文档。见[工作流](docs/doc-driven-dev/workflow.qmd)。
+  git,不进文档。见[工作流](docs/skills/doc-driven-dev/workflow.qmd)。
 - **sinopia** —— 在 Python 里把图组合成一棵一等模型的树(`Box` 锚点、带主题的形状、自算控制点的
   `Route` 连接器、声明式 `Row` / `Col` / `Grid` 布局),再把 SVG 内联进来,让 `var(--bs-*)` 颜色
-  跟随主题。见 [sinopia](docs/sinopia/sinopia.qmd)。
+  跟随主题。见 [sinopia](docs/skills/sinopia/sinopia.qmd)。
 
 ## 循环
 

@@ -6,7 +6,7 @@ description: Diagrams as code — a figure is a tree of first-class Python model
 # sinopia
 
 Diagrams as code: a figure is a tree of first-class pydantic models, each rendering itself
-to themed SVG. The engine is the `sinopia` package in `../../src/sinopia/`. Read
+to themed SVG. The engine is the `sinopia` package in `../../../src/sinopia/`. Read
 `sinopia.qmd` for the usage guide:
 
 - The two ways to place geometry: hand-placed `Box` rendered through `Figure`, or

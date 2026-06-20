@@ -37,7 +37,7 @@ description = "Symlink one skill (docs/<name>) into ~/.claude/skills"
 args = ["name"]
 cmd = """
 mkdir -p $HOME/.claude/skills
-ln -sfn $PIXI_PROJECT_ROOT/docs/{{ name }} $HOME/.claude/skills/{{ name }}
+ln -sfn $PIXI_PROJECT_ROOT/docs/skills/{{ name }} $HOME/.claude/skills/{{ name }}
 """
 
 [tasks.link-skills]

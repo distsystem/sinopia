@@ -1,0 +1,40 @@
+/*-- scss:rules --*/
+
+// ── Semantic token contract ──────────────────────────────────────────────
+// The interface every theme implements. Components (components.scss) read ONLY
+// these tokens; a theme supplies the values by repointing Bootstrap's $vars
+// (which most tokens alias) plus the few extras below. Adding a theme means
+// overriding tokens, never rewriting a component. Defaults keep components
+// usable with no theme loaded.
+:root {
+  // accent
+  --accent:          var(--bs-primary);
+  --accent-strong:   var(--bs-link-hover-color, var(--bs-primary));
+
+  // surfaces
+  --surface:         var(--bs-body-bg);
+  --surface-raised:  var(--bs-tertiary-bg);
+  --surface-sunken:  var(--bs-secondary-bg);
+
+  // text
+  --text:            var(--bs-body-color);
+  --text-secondary:  var(--bs-emphasis-color, var(--bs-body-color));
+  --text-muted:      var(--bs-secondary-color);
+  --text-subtle:     var(--bs-tertiary-color);
+
+  // lines
+  --border:          var(--bs-border-color);
+  --border-soft:     var(--bs-border-color);
+
+  // accent washes (tag / code chips) — neutral default follows --accent;
+  // a theme may override with exact solid hexes.
+  --accent-wash:     color-mix(in srgb, var(--accent)  8%, var(--surface));
+  --accent-wash-2:   color-mix(in srgb, var(--accent) 14%, var(--surface));
+  --accent-wash-3:   color-mix(in srgb, var(--accent) 24%, var(--surface));
+
+  // shape / depth / type
+  --radius:          8px;
+  --shadow-whisper:  0 4px 24px rgba(20, 19, 19, 0.05);
+  --font-serif:      var(--bs-font-sans-serif);
+  --font-mono:       var(--bs-font-monospace);
+}

@@ -12,3 +12,6 @@ pixi.lock
 !/drafts/_template.qmd
 
 **/*.quarto_ipynb
+
+# Vendored design reference (tw93/kami showcase): local-only, never committed/published.
+/kami/

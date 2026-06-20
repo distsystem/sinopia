@@ -1,0 +1,66 @@
+/*-- scss:rules --*/
+
+// ── Component vocabulary ─────────────────────────────────────────────────
+// Theme-agnostic structure. Every rule reads the semantic token contract
+// (contract.scss); none names a palette. Author as Quarto fenced divs /
+// attribute spans; the matching Typst #let lives in _typst/components.typ.
+
+// Eyebrow — a small accent section label above a heading.  [03 · Color]{.eyebrow}
+.eyebrow {
+  display: inline-block;
+  font-weight: 500; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 0.2rem;
+}
+
+// Tag — an accent-wash chip, three tiers.  [标准]{.tag} · [极淡]{.tag .faint}
+.tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent);
+  background: var(--accent-wash-2); padding: 2px 8px; border-radius: 4px;
+}
+.tag.faint  { background: var(--accent-wash); }
+.tag.strong { background: var(--accent-wash-3); }
+
+// Stat — a big serif accent number over a muted label.
+//   ::: {.stat}
+//   [6]{.num} [文档类型]{.lab}
+//   :::
+.stat { display: inline-flex; flex-direction: column; gap: 2px; margin: 0 1.8rem 0.6rem 0; }
+.stat .num {
+  font-family: var(--font-serif); font-weight: 500; font-size: 1.7rem; line-height: 1;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.stat .lab { font-size: 0.76rem; color: var(--text-muted); }
+
+// Card — a raised surface with a soft border and a whisper shadow. Put a bold
+// lead (`**Title**`), not a `####` heading, so the flex flow is kept.
+.card {
+  background: var(--surface-raised); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px 22px;
+  box-shadow: var(--shadow-whisper);
+}
+.card > :first-child { margin-top: 0; }
+.card > :last-child  { margin-bottom: 0; }
+
+// Card grid — auto-fitting columns; ::: {.cards} wrapping several ::: {.card}.
+.cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; margin: 1rem 0;
+}
+
+// Swatches — colour chips with name / role / hex captions.
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0.6rem 0 1.4rem; }
+.swatches > figure {
+  margin: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  background: var(--surface-raised);
+}
+.swatches .chip { height: 80px; border-bottom: 1px solid var(--border); }
+.swatches figcaption { padding: 10px 12px; }
+.swatches .nm { font-weight: 500; margin: 0; }
+.swatches .ro { font-size: 0.74rem; color: var(--text-muted); margin: 2px 0 4px; line-height: 1.4; }
+.swatches .hx { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-subtle); }
+
+// Dash list — em-dash leaders instead of bullets, more bookish.  ::: {.dash}
+.dash ul, ul.dash { list-style: none; padding-left: 0; }
+.dash ul li, ul.dash li { position: relative; padding-left: 1.1em; }
+.dash ul li::before, ul.dash li::before { content: "–"; position: absolute; left: 0; color: var(--accent); }

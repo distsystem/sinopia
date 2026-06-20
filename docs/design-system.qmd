@@ -1,0 +1,225 @@
+---
+title: "设计系统"
+---
+
+::: {.callout-note appearance="simple"}
+**逐字复刻**:下面用 kami 原版([kami 原版](kami/index-zh.html){target="_blank"})的**原文内容**(同样的字、hex、type
+specs、组件文案),改由我们的 Quarto 主题渲染。内容一致,所以一切差异都来自渲染系统本身。页面末尾「差异在哪里」逐项列出。
+:::
+
+```{=html}
+<header style="border-bottom:1px solid var(--border-soft);padding-bottom:1.2rem;margin-bottom:1.6rem">
+  <p style="font-family:monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle);margin:0 0 .8rem">Design System · v1.7.1 · 2026.06</p>
+  <h1 style="font-size:3.6rem;font-weight:500;line-height:1.05;letter-spacing:-.02em;margin:0 0 .6rem">Kami<span style="margin-left:.4rem;color:var(--accent)">紙</span></h1>
+  <p style="font-size:1.2rem;color:var(--text-muted);margin:0 0 1rem">好内容,值得好版面。Kami 是一套适合 AI 时代的排版设计系统,让文档更清晰好读,也容易记住。</p>
+  <p style="display:flex;gap:1.4rem;flex-wrap:wrap;font-family:monospace;font-size:.78rem;color:var(--text-subtle);margin:0">
+    <span><b style="color:var(--text-secondary)">Canvas</b> #f5f4ed</span>
+    <span><b style="color:var(--text-secondary)">Accent</b> #1B365D</span>
+    <span><b style="color:var(--text-secondary)">Serif</b> TsangerJinKai / Charter</span>
+    <span><b style="color:var(--text-secondary)">Sans</b> = Serif (一页一字体)</span>
+  </p>
+</header>
+```
+
+[02 · Manifesto]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 设计原则
+
+暖米纸底,*油墨蓝*点缀,serif 承担层级,硬阴影与花哨配色都退后;这套系统面向印刷文档,负责把内容收束成稳定、清晰、易读的版面。
+
+```{=html}
+<ol style="list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--border-soft);margin:1rem 0;padding:0;font-size:.92rem">
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 24px 14px 0;border-bottom:1px solid var(--border-soft);border-right:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">1</span><span>页面背景 parchment <code>#f5f4ed</code>,不用纯白</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 0 14px 24px;border-bottom:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">2</span><span>强调色只有油墨蓝 <code>#1B365D</code>,不引入第二种彩色</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 24px 14px 0;border-bottom:1px solid var(--border-soft);border-right:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">3</span><span>所有灰色暖调 (yellow-brown undertone),禁止冷蓝灰</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 0 14px 24px;border-bottom:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">4</span><span>英文 serif 通吃标题和正文,中文标题用 serif、正文用 sans</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 24px 14px 0;border-bottom:1px solid var(--border-soft);border-right:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">5</span><span>Serif 正文 400,标题 500,不用合成 bold</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 0 14px 24px;border-bottom:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">6</span><span>行距三档:紧凑标题 1.1–1.3 / 密排 1.4–1.45 / 阅读 1.5–1.55</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 24px 14px 0;border-bottom:1px solid var(--border-soft);border-right:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">7</span><span>Tag 背景必须实色 hex,禁止 rgba(WeasyPrint 双层矩形 bug)</span></li>
+  <li style="display:grid;grid-template-columns:26px 1fr;gap:4px;padding:14px 0 14px 24px;border-bottom:1px solid var(--border-soft)"><span style="color:var(--accent);font-weight:500">8</span><span>阴影只用 ring 或 whisper shadow,不用硬 drop shadow</span></li>
+</ol>
+```
+
+[03 · Color]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 暖调克制
+
+唯一强调色、纯暖调中性灰、零冷色;油墨蓝全文档不超过 **5%** 面积,超过就从克制变成堆砌。
+
+```{=html}
+<style>.sw{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:.6rem 0 1.4rem}.sw figure{margin:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface-raised)}.sw .chip{height:80px;border-bottom:1px solid var(--border)}.sw figcaption{padding:10px 12px}.sw .nm{font-weight:500;margin:0}.sw .ro{font-size:.74rem;color:var(--text-muted);margin:2px 0 4px;line-height:1.4}.sw .hx{font-family:monospace;font-size:.72rem;color:var(--text-subtle)}</style>
+<p style="font-weight:500;color:var(--text-secondary);margin:.4rem 0">画布 · Canvas</p>
+<div class="sw">
+  <figure><div class="chip" style="background:#f5f4ed"></div><figcaption><p class="nm">Parchment</p><p class="ro">页面底色,也是整套设计的温度来源</p><span class="hx">#F5F4ED</span></figcaption></figure>
+  <figure><div class="chip" style="background:#faf9f5"></div><figcaption><p class="nm">Ivory</p><p class="ro">卡片 · 浮起容器</p><span class="hx">#FAF9F5</span></figcaption></figure>
+  <figure><div class="chip" style="background:#e8e6dc"></div><figcaption><p class="nm">Warm Sand</p><p class="ro">按钮默认背景 · 交互面</p><span class="hx">#E8E6DC</span></figcaption></figure>
+  <figure><div class="chip" style="background:#141413"></div><figcaption><p class="nm">Deep Dark</p><p class="ro">深色主题页面底,不取纯黑,保留一点橄榄底色</p><span class="hx">#141413</span></figcaption></figure>
+</div>
+<p style="font-weight:500;color:var(--text-secondary);margin:.4rem 0">主调 · Brand</p>
+<div class="sw">
+  <figure><div class="chip" style="background:#1B365D"></div><figcaption><p class="nm" style="color:var(--accent)">Ink Blue</p><p class="ro">主色 · CTA · quote 竖线 · 章节标题</p><span class="hx">#1B365D</span></figcaption></figure>
+  <figure><div class="chip" style="background:#2D5A8A"></div><figcaption><p class="nm">Ink Light</p><p class="ro">深色底上的链接 · 亮变体</p><span class="hx">#2D5A8A</span></figcaption></figure>
+  <figure><div class="chip" style="background:#30302e"></div><figcaption><p class="nm">Dark Surface</p><p class="ro">深色主题容器 · 暖炭灰</p><span class="hx">#30302E</span></figcaption></figure>
+  <figure><div class="chip" style="background:#b53333"></div><figcaption><p class="nm">Error</p><p class="ro">错误,深暖红,不刺眼</p><span class="hx">#B53333</span></figcaption></figure>
+</div>
+<p style="font-weight:500;color:var(--text-secondary);margin:.4rem 0">中性 · Warm Neutrals</p>
+<div class="sw">
+  <figure><div class="chip" style="background:#141413"></div><figcaption><p class="nm">Near Black</p><span class="hx">#141413</span></figcaption></figure>
+  <figure><div class="chip" style="background:#3d3d3a"></div><figcaption><p class="nm">Dark Warm</p><span class="hx">#3D3D3A</span></figcaption></figure>
+  <figure><div class="chip" style="background:#504e49"></div><figcaption><p class="nm">Olive</p><span class="hx">#504e49</span></figcaption></figure>
+  <figure><div class="chip" style="background:#6b6a64"></div><figcaption><p class="nm">Stone</p><span class="hx">#6b6a64</span></figcaption></figure>
+</div>
+```
+
+### Tag Tints · rgba → 实色对照
+
+油墨蓝 `#1B365D` 叠加在 parchment 上的等效实色;Tag 背景不用 `rgba()`,避免 WeasyPrint 的双层矩形问题。
+
+```{=html}
+<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:.6rem 0">
+  <div style="border:1px solid var(--border);border-radius:8px;padding:14px 12px"><span style="display:inline-block;background:#EEF2F7;color:var(--accent);font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px">Tag sample</span><p style="margin:0;color:var(--text-muted)">0.08</p><span style="font-family:monospace;font-size:.72rem;color:var(--text-subtle)">#EEF2F7</span></div>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:14px 12px"><span style="display:inline-block;background:#E4ECF5;color:var(--accent);font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px">Tag sample</span><p style="margin:0;color:var(--text-muted)">0.14</p><span style="font-family:monospace;font-size:.72rem;color:var(--text-subtle)">#E4ECF5</span></div>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:14px 12px;outline:1.5px solid var(--accent);outline-offset:-1.5px"><span style="display:inline-block;background:#E4ECF5;color:var(--accent);font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px">Tag sample</span><p style="margin:0;color:var(--accent)">0.18 Default</p><span style="font-family:monospace;font-size:.72rem;color:var(--text-subtle)">#E4ECF5</span></div>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:14px 12px"><span style="display:inline-block;background:#D0DCE9;color:var(--accent);font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px">Tag sample</span><p style="margin:0;color:var(--text-muted)">0.22</p><span style="font-family:monospace;font-size:.72rem;color:var(--text-subtle)">#D0DCE9</span></div>
+  <div style="border:1px solid var(--border);border-radius:8px;padding:14px 12px"><span style="display:inline-block;background:#D6E1EE;color:var(--accent);font-size:.75rem;padding:2px 8px;border-radius:3px;margin-bottom:8px">Tag sample</span><p style="margin:0;color:var(--text-muted)">0.30</p><span style="font-family:monospace;font-size:.72rem;color:var(--text-subtle)">#D6E1EE</span></div>
+</div>
+```
+
+[04 · Typography]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 字体系统
+
+Serif 承担层级,sans 承担功能;serif 正文 400,标题 500。
+
+```{=html}
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:1rem 0">
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-radius:12px;padding:22px 20px"><p style="font-size:3rem;line-height:1;margin:0 0 14px">紙 Aa</p><p style="font-weight:500;margin:0">Serif · 标题</p><p style="font-family:monospace;font-size:.74rem;color:var(--text-muted);margin:2px 0 8px">TsangerJinKai02 / Charter</p><p style="font-size:.8rem;color:var(--text-secondary);margin:0">承担标题、引语与数字强调,中文取仓耳今楷,英文取 Charter。</p></div>
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-radius:12px;padding:22px 20px"><p style="font-family:var(--bs-font-monospace);font-size:2.6rem;line-height:1;margin:0 0 14px">&lt;/&gt;</p><p style="font-weight:500;margin:0">Mono · 代码</p><p style="font-family:monospace;font-size:.74rem;color:var(--text-muted);margin:2px 0 8px">JetBrains Mono</p><p style="font-size:.8rem;color:var(--text-secondary);margin:0">用于代码块、版本号、hex 值与等宽数字,字号较正文低一档。</p></div>
+</div>
+<p style="font-weight:500;color:var(--text-secondary);margin:.4rem 0">层级(印刷品 pt · 屏幕 px ≈ pt × 1.33)</p>
+<div style="display:grid;grid-template-columns:130px 1fr 130px;column-gap:24px;border-top:1px solid var(--border-soft)">
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Display</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-weight:500;font-size:2.6rem;line-height:1.1">高质量文档读起来清晰、稳定、有余韵</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">36–48 pt · 500 · 1.10</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Section H1</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-weight:500;font-size:1.5rem">色彩系统 · Color</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">18–22 pt · 500 · 1.20</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Subsection H2</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-weight:500;font-size:1.15rem">画布 · Canvas</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">14–16 pt · 500 · 1.25</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Body Lead</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:1rem">面向印刷文档的约束系统,目标是稳定、清晰、易读。</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">11 pt · 400 · 1.55</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Body</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.92rem">油墨蓝全文档不超过 5% 面积,超过就从克制变成堆砌;所有灰色都有暖黄底色,R ≈ G &gt; B 是基本规律。</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">9.5–10 pt · 400 · 1.55</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Caption</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-muted)">图注、脚注、说明文字,颜色用 olive 或 stone 降一级。</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">8.5–9 pt · 400 · 1.45</div>
+  <div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.78rem;color:var(--text-subtle)">Label</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent)">Design System · v1.7.1</div><div style="padding:14px 0;border-bottom:1px solid var(--border-soft);font-family:monospace;font-size:.72rem;color:var(--text-muted);text-align:right">7.5–8 pt · 600 · 1.35</div>
+</div>
+```
+
+[05 · Spacing & Shape]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 节奏与形
+
+基础单位 4pt,密度越高 margin 越小,场合越正式 margin 越大。
+
+| Scale | Value | Use |
+|---|---|---|
+| xs | 2–3 pt | 同行内元素 |
+| sm | 4–5 pt | tag padding · 紧凑布局 |
+| md | 8–10 pt | 组件内部 |
+| lg | 16–20 pt | 组件之间 · 卡片 padding |
+| xl | 24–32 pt | section 标题 margin |
+| 2xl | 40–60 pt | 大 section 之间 |
+| 3xl | 80–120 pt | 长文档章节之间 |
+
+### 圆角尺度 · Radii
+
+```{=html}
+<div style="display:flex;gap:16px;flex-wrap:wrap;margin:.6rem 0">
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:4px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">4</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">极紧</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:6px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">6</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">代码块</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:8px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">8</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">默认卡片</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:12px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">12</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">容器</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:16px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">16</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">特色卡片</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:24px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">24</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">大容器</div></div>
+  <div style="text-align:center"><div style="width:64px;height:64px;background:var(--surface-raised);border:1px solid var(--border);border-radius:32px"></div><div style="font-family:monospace;font-size:.72rem"><b style="color:var(--accent)">32</b> pt</div><div style="font-size:.72rem;color:var(--text-muted)">Hero</div></div>
+</div>
+```
+
+### 深度 · 阴影三法
+
+Kami 不用传统硬阴影,深度交给 ring shadow、whisper shadow 与明暗交替。
+
+```{=html}
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:.6rem 0">
+  <div style="background:var(--surface-raised);border-radius:12px;padding:22px 20px;box-shadow:0 0 0 1px var(--border)"><p style="font-weight:500;margin:0 0 4px">Ring Shadow</p><p style="font-family:monospace;font-size:.72rem;color:var(--text-muted);margin:0;line-height:1.5">0 0 0 1pt var(--ring-warm)<br>按钮 · 卡片 hover</p></div>
+  <div style="background:var(--surface-raised);border-radius:12px;padding:22px 20px;box-shadow:0 4px 24px rgba(20,19,19,.05)"><p style="font-weight:500;margin:0 0 4px">Whisper Shadow</p><p style="font-family:monospace;font-size:.72rem;color:var(--text-muted);margin:0;line-height:1.5">0 4pt 24pt rgba(0,0,0,.05)<br>极轻浮起 · 特色卡</p></div>
+  <div style="background:var(--text);color:var(--surface-raised);border-radius:12px;padding:22px 20px"><p style="font-weight:500;margin:0 0 4px">Light ⇌ Dark</p><p style="font-family:monospace;font-size:.72rem;color:#b0aea5;margin:0;line-height:1.5">parchment ⇌ deep-dark<br>section 级别 · 对比最明显</p></div>
+</div>
+```
+
+[06 · Components]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 原子组件
+
+组件不求多,只保留能解决具体问题的一组。
+
+```{=html}
+<style>.cg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:1rem 0}.cg .c{background:var(--surface-raised);border:1px solid var(--border);border-radius:12px;padding:22px 22px}.cg h4{font-weight:500;margin:0 0 2px}.cg .hint{font-family:monospace;font-size:.72rem;color:var(--text-subtle);margin:0 0 14px}</style>
+<div class="cg">
+  <div class="c"><h4>Buttons</h4><p class="hint">ring shadow 替代硬投影 · 8pt 圆角</p><div style="display:flex;gap:10px;flex-wrap:wrap"><span style="background:var(--accent);color:var(--surface-raised);font-size:.75rem;font-weight:500;padding:8px 14px;border-radius:8px">Primary CTA</span><span style="background:#e8e6dc;color:var(--text-secondary);font-size:.75rem;font-weight:500;padding:8px 14px;border-radius:8px">Secondary</span><span style="color:var(--accent);font-size:.75rem;font-weight:500;padding:8px 14px;border-radius:8px;box-shadow:0 0 0 1px var(--accent)">Ghost</span></div></div>
+  <div class="c"><h4>Tags · 三档</h4><p class="hint">实色 hex · 从弱到强选</p><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><span style="background:#EEF2F7;color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:2px;text-transform:uppercase;letter-spacing:.04em">极淡 0.08</span><span style="background:#E4ECF5;color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em">标准 0.18</span><span style="background:linear-gradient(to right,#D6E1EE,#E4ECF5 70%,#EEF2F7);color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em">笔刷渐变</span></div></div>
+  <div class="c"><h4>Quote</h4><p class="hint">左 2pt 品牌实线 + olive 色</p><blockquote style="border-left:2px solid var(--accent);color:var(--text-muted);padding:4px 0 4px 14px;margin:0">一千个 no 换一个 yes,宁可清淡,不可浓艳。</blockquote></div>
+  <div class="c"><h4>Metric</h4><p class="hint">serif 数字 + sans 标签 · tabular-nums</p><div style="display:flex;gap:1.8rem"><div><span style="font-size:1.6rem;font-weight:500;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums">6</span><br><span style="font-size:.76rem;color:var(--text-muted)">文档类型</span></div><div><span style="font-size:1.6rem;font-weight:500;color:var(--accent);line-height:1">1</span><br><span style="font-size:.76rem;color:var(--text-muted)">强调色</span></div><div><span style="font-size:1.6rem;font-weight:500;color:var(--accent);line-height:1">8</span><br><span style="font-size:.76rem;color:var(--text-muted)">条规则</span></div></div></div>
+  <div class="c"><h4>Dash List</h4><p class="hint">短横线代替圆点 · 更书卷气</p><ul style="list-style:none;margin:0;padding:0;font-size:.9rem"><li style="position:relative;padding-left:14px"><span style="position:absolute;left:0;color:var(--accent)">–</span>暖米纸底,不用纯白</li><li style="position:relative;padding-left:14px"><span style="position:absolute;left:0;color:var(--accent)">–</span>油墨蓝点缀,不引第二色</li><li style="position:relative;padding-left:14px"><span style="position:absolute;left:0;color:var(--accent)">–</span>Serif 承担权威</li></ul></div>
+  <div class="c"><h4>Featured Card</h4><p class="hint">whisper shadow + 16pt 圆角</p><div style="background:var(--surface-raised);border-radius:16px;padding:18px 20px;box-shadow:0 4px 24px rgba(0,0,0,.05);border:1px solid var(--border)"><p style="font-weight:500;margin:0 0 6px">Tesla 公司介绍 · One-Pager</p><p style="font-size:.78rem;color:var(--text-muted);margin:0 0 10px;line-height:1.5">单页 A4 · 中文版 · 4 张指标卡 + 3 段正文 + 时间线</p><div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:#EEF2F7;color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:2px">中文</span><span style="background:#EEF2F7;color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:2px">A4 × 1</span><span style="background:#EEF2F7;color:var(--accent);font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:2px">Ink Blue</span></div></div></div>
+</div>
+```
+
+Code Block(ivory 底 + 0.5pt border + 6pt 圆角 + mono 字体):
+
+```text
+// 暖米纸 · 一种克制的温度
+canvas   = parchment; accent = ink_blue
+palette  = warm_neutrals − cool_grays
+document = serif × hierarchy + generous_space
+beauty   = constraints × intention ÷ noise
+```
+
+[08 · Decision Lookup]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 决策速查
+
+遇到"该用什么"时先看这张表,不在表里就回到基础原则。
+
+| 要做什么 | 怎么做 |
+|---|---|
+| 大标题 | serif `500`,字号按层级,line-height `1.10–1.30` |
+| 正文阅读 | sans `400`,`9.5–10 pt`,line-height `1.55` |
+| 强调一个数字 | `color: var(--brand)`,不要粗体 |
+| 分隔两段内容 | `2.5pt` 品牌色左侧竖线,或 `0.5pt` 暖灰虚线 |
+| 引用某人的话 | 左 `2pt` 品牌色实线 + olive 色 |
+| 展示代码 | ivory 底 + `0.5pt` border + `6pt` 圆角 + mono 字体 |
+| 区分主次按钮 | Primary 品牌色填充 + ivory 字;Secondary warm-sand + charcoal |
+| 章节开始 | serif `500` · `15pt` · 纯字号层级,无额外装饰 |
+| 数据卡 | ivory 底 + `8pt` 圆角 + serif 大数字(油墨蓝) + sans 小标签 |
+
+[09 · Anti-Patterns]{style="font-weight:500;font-size:.88rem;letter-spacing:.02em;color:var(--bs-primary)"}
+
+## 反面示例
+
+破例可以,但理由要足够清楚。
+
+```{=html}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:1rem 0;font-size:.9rem">
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-radius:8px;padding:18px 20px"><h5 style="font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle);margin:0 0 8px">Don't</h5>页面背景用 <code>#ffffff</code> 纯白或 <code>#f3f4f6</code> 冷灰,会让版面变硬,也削弱 Kami 的暖米纸气质。</div>
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:18px 20px"><h5 style="font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px">Do</h5>始终使用 <code>#f5f4ed</code> parchment,打印时把 <code>@page background</code> 也设为同色,避免白边。</div>
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-radius:8px;padding:18px 20px"><h5 style="font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle);margin:0 0 8px">Don't</h5>标题用 <code>font-weight: 600</code> 或更粗的合成 bold,笔画容易变糊,版面也会显得粗重。</div>
+  <div style="background:var(--surface-raised);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:18px 20px"><h5 style="font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px">Do</h5>正文 400,标题 500(真实 W05 字重);需要更强存在感时,用字号或品牌色左侧竖线,不靠合成粗体。</div>
+</div>
+```
+
+## 差异在哪里
+
+逐字复刻(内容一字不差)后,差异只剩渲染系统本身,分四类:
+
+| 类别 | 具体差异 | 根因 |
+|---|---|---|
+| **完全一致** | 全部 hex 色值、tint 实色、文案、type spec 数字 | 颜色 token 已映射进 Bootstrap 变量,文字逐字搬 |
+| **字形不同** | 标题/正文是 **LXGW 楷**(原版是 **TsangerJinKai 仓耳今楷**);拉丁退 Georgia(原版 Charter) | 商业字体未带,换 OFL 的 LXGW |
+| **版式骨架弱** | 原版有 106px 巨字 hero、`00–11` 自动**章节编号**、`.section-lede` 大字导言;我们的 h2 只有 brand 竖条,编号靠手写小标签 | kami 是 bespoke 单页;Quarto 文档页是 h1/h2 结构 |
+| **组件像素细节** | 卡片/按钮的圆角、内边距、`.swatch` chip 高度、`.type-grid` 三栏比例,靠 `{=html}` 手搭近似,非逐像素 | Quarto 无这些原生组件,用内联 style 复刻 |
+
+**结论**:内容逐字一致时,**颜色与数据 100% 对齐**;真正的差是 ① **字体**(LXGW vs 仓耳今楷)、② **版式骨架**(hero 巨字 / 章节编号 / 大导言)、③ 组件的**像素级 chrome**。前两类是有意取舍(授权 + 文档站结构),第三类可继续用 `{=html}` 或往 `kami.scss` 加组件类逼近。

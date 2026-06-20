@@ -5,11 +5,17 @@ project:
     - "*.qmd"
     - "*/*.qmd"
     - "skills/*/*.qmd"
+  resources:
+    - kami                 # vendored kami showcase (local-only, gitignored) → _site/kami/
 
 website:
   title: "doc-driven-dev"
   sidebar:
-    contents: auto         # single entry auto-discovers every page
+    contents:
+      - auto: true                  # auto-discover every .qmd page
+      - text: "kami 原版"           # original showcase as its own page — a direct link, no iframe
+        href: kami/index-zh.html
+        target: "_blank"
 
 filters:
   - _filters/rebase-readme-links.lua
@@ -21,5 +27,13 @@ execute:
 
 format:
   html:
-    theme:
-      - _styles/kami.scss
+    include-in-header:                 # webfonts from jsDelivr (OFL; chunked by unicode-range)
+      - text: |
+          <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/lxgwwenkai-regular.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/lxgwwenkai-bold.css">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono/400.css">
+    theme:                             # cascade: shared base → contract → kami values+skin
+      - _styles/_base/contract.scss    # semantic token contract (the interface)
+      - _styles/_base/components.scss   # theme-agnostic component vocabulary
+      - _styles/kami/theme.scss         # kami values + skin

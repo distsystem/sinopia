@@ -21,6 +21,7 @@ filters:
   - _filters/rebase-readme-links.lua
   - _filters/compare-option.lua
   - _filters/sinopia-carrier.lua
+  - _filters/components.lua          # typst target: lower .card/.stat/.tag/… → #fn calls
 
 execute:
   echo: false              # pages show the figure, not the code that draws it

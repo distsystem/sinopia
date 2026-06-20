@@ -8,12 +8,16 @@
 #import "/_typst/components.typ": components
 
 #let k = components(theme)
-#let eyebrow  = k.eyebrow
-#let swatches = k.swatches
-#let card     = k.card
-#let stat     = k.stat
-#let quote    = k.quote
-#let tag      = k.tag
+#let eyebrow   = k.eyebrow
+#let swatches  = k.swatches
+#let card      = k.card
+#let stat      = k.stat
+#let quote     = k.quote
+#let tag       = k.tag
+#let steps     = k.steps
+#let timeline  = k.timeline
+#let hero      = k.hero
+#let dash-list = k.dash-list
 
 // ---- global skin ----
 #set page(fill: theme.surface)

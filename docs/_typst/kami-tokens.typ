@@ -13,7 +13,9 @@
   text-subtle:    rgb("#6b6a64"),  // tertiary / metadata
   border:         rgb("#e8e6dc"),
   border-soft:    rgb("#e5e3d8"),
-  accent-wash:    rgb("#eef2f7"),  // code / tag wash (ink-blue at ~0.08)
+  accent-wash:    rgb("#eef2f7"),  // tag faint / code wash (ink-blue at ~0.08)
+  accent-wash-2:  rgb("#e4ecf5"),  // tag default
+  accent-wash-3:  rgb("#d0dce9"),  // tag strong
   error:          rgb("#b53333"),
   serif:          "LXGW WenKai",
 )

@@ -9,6 +9,8 @@ sinopia = { path = "." }
 quarto = "*"
 jupyter = "*"           # Quarto's python engine runs the figure cells
 attrs = ">=23.1,<26"    # jupyter would pull attrs 26; stretchable caps it below 26
+fonttools = "*"
+brotli = "*"
 
 [pypi-dependencies]
 stretchable = ">=1.1.8"   # PyPI-only; absent from conda-forge
@@ -31,6 +33,10 @@ depends-on = ["setup"]
 description = "Render, then open the static site in the browser (file://, no server)"
 cmd = "xdg-open docs/_site/index.html"
 depends-on = ["render"]
+
+[tasks.make-fonts]
+description = "Regenerate LXGW WenKai woff2 from the installed TTF → docs/fonts/ (re-run on LXGW updates; upload output to the webfont CDN host)"
+cmd = "python docs/_tools/ttf2woff2.py"
 
 [tasks.link-skill]
 description = "Symlink one skill (docs/<name>) into ~/.claude/skills"

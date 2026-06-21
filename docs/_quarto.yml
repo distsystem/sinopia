@@ -28,11 +28,9 @@ execute:
 
 format:
   html:
-    include-in-header:                 # webfonts from jsDelivr (OFL; chunked by unicode-range)
+    include-in-header:                 # LXGW WenKai is self-hosted (see _styles/kami/theme.scss @font-face)
       - text: |
           <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/lxgwwenkai-regular.css">
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont/lxgwwenkai-bold.css">
           <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/jetbrains-mono/400.css">
     theme:                             # cascade: shared base → contract → kami values+skin
       - _styles/_base/contract.scss    # semantic token contract (the interface)
